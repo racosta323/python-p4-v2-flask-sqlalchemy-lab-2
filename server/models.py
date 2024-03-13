@@ -19,6 +19,8 @@ class Customer(db.Model):
 
     def __repr__(self):
         return f'<Customer {self.id}, {self.name}>'
+    
+    reviews = db.relationship('Review', back_populates='customer', cascade ='all, delete-orphan')
 
 
 class Item(db.Model):
@@ -30,3 +32,18 @@ class Item(db.Model):
 
     def __repr__(self):
         return f'<Item {self.id}, {self.name}, {self.price}>'
+    
+    reviews = db.relationship('Review', back_populates="item", cascade = 'all, delete-orphan')
+    
+
+class Review(db.Model):
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.String)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'))
+    item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
+
+    customer = db.relationship('Customer', back_populates='reviews')
+    item = db.relationship('Item', back_populates = 'reviews')
+
