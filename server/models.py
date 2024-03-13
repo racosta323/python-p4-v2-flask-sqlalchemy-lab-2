@@ -22,6 +22,8 @@ class Customer(db.Model):
     
     reviews = db.relationship('Review', back_populates='customer', cascade ='all, delete-orphan')
 
+    items = association_proxy('reviews', 'item', creator=lambda item_obj: Review(item=item_obj))
+
 
 class Item(db.Model):
     __tablename__ = 'items'
